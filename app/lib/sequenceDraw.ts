@@ -24,7 +24,7 @@ export function drawCover(canvas: HTMLCanvasElement, img: HTMLImageElement | nul
   ctx.fillStyle = FALLBACK_FILL
   ctx.fillRect(0, 0, cw, ch)
   if (!img || !img.complete || img.naturalWidth === 0) return false
-  const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight) * 0.82
+  const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight)
   const dw = img.naturalWidth * scale
   const dh = img.naturalHeight * scale
   ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh)

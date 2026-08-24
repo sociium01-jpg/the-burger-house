@@ -20,7 +20,7 @@ export default function HomePage() {
 
           <BurgerGrid />
 
-          <ScrollHero sequence={SEQUENCES.heroCooking} heightVh={400}>
+          <ScrollHero sequence={SEQUENCES.heroCooking} heightVh={400} id="grill">
             {(progress) => <HeroCookingCopy progress={progress} />}
           </ScrollHero>
 

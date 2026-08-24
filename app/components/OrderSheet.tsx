@@ -3,6 +3,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { MENU, rupees, type MenuItem } from '../lib/menu'
+import { isCochinServiceable } from '../lib/serviceArea'
+import { GoogleBikeMap } from './GoogleBikeMap'
 
 type QtyMap = Record<MenuItem['id'], number>
 type Step = 'bag' | 'address' | 'pay' | 'kitchen' | 'rider' | 'live'
@@ -85,6 +87,8 @@ function OrderSheet({ seed, onClose }: { seed?: MenuItem['id']; onClose: () => v
   const [kitchenDone, setKitchenDone] = useState(false)
   const [rider, setRider] = useState('Finding a rider…')
   const [orderId] = useState(() => `BH-${Math.floor(1000 + Math.random() * 9000)}`)
+  const [serviceError, setServiceError] = useState('')
+  const serviceable = isCochinServiceable(address)
 
   const lines = MENU.filter((item) => qty[item.id] > 0)
   const total = lines.reduce((sum, item) => sum + item.price * qty[item.id], 0)
@@ -95,6 +99,11 @@ function OrderSheet({ seed, onClose }: { seed?: MenuItem['id']; onClose: () => v
 
   const goPay = () => {
     if (!address.name.trim() || address.phone.length < 10 || address.pincode.length !== 6) return
+    if (!isCochinServiceable(address)) {
+      setServiceError('Not serviceable. We only deliver in Cochin, Kerala (PIN 682xxx).')
+      return
+    }
+    setServiceError('')
     setStep('pay')
   }
 
@@ -120,8 +129,6 @@ function OrderSheet({ seed, onClose }: { seed?: MenuItem['id']; onClose: () => v
       }, 2800)
     }, 1100)
   }
-
-  const dest = pinToDest(address.pincode)
 
   return (
     <motion.div
@@ -188,16 +195,39 @@ function OrderSheet({ seed, onClose }: { seed?: MenuItem['id']; onClose: () => v
             <Field label="Phone" value={address.phone} onChange={(v) => setAddress({ ...address, phone: v.replace(/\D/g, '').slice(0, 10) })} inputMode="tel" />
             <Field label="Street" value={address.line1} onChange={(v) => setAddress({ ...address, line1: v })} />
             <div className="order-form-row">
-              <Field label="City" value={address.city} onChange={(v) => setAddress({ ...address, city: v })} />
-              <Field label="State" value={address.state} onChange={(v) => setAddress({ ...address, state: v })} />
+              <Field
+                label="City"
+                value={address.city}
+                onChange={(v) => {
+                  setAddress({ ...address, city: v })
+                  setServiceError('')
+                }}
+              />
+              <Field
+                label="State"
+                value={address.state}
+                onChange={(v) => {
+                  setAddress({ ...address, state: v })
+                  setServiceError('')
+                }}
+              />
             </div>
             <Field
               label="Pincode"
               value={address.pincode}
-              onChange={(v) => setAddress({ ...address, pincode: v.replace(/\D/g, '').slice(0, 6) })}
+              onChange={(v) => {
+                setAddress({ ...address, pincode: v.replace(/\D/g, '').slice(0, 6) })
+                setServiceError('')
+              }}
               inputMode="numeric"
             />
-            <p className="order-hint">Demo address locked to Marine Drive, Cochin, Kerala — edit pincode to move the live map pin.</p>
+            {!serviceable ? (
+              <p className="order-error" role="alert">
+                {serviceError || 'Not serviceable. We only deliver in Cochin, Kerala (PIN 682xxx).'}
+              </p>
+            ) : (
+              <p className="order-hint">Delivery only in Cochin. Default drop: Marine Drive, 682031.</p>
+            )}
           </form>
         )}
 
@@ -262,12 +292,12 @@ function OrderSheet({ seed, onClose }: { seed?: MenuItem['id']; onClose: () => v
 
         {step === 'live' && (
           <div className="live-block">
-            <DummyMap dest={dest} label={`${address.line1}, ${address.city}`} pincode={address.pincode} />
+            <GoogleBikeMap address={address} />
             <p className="display" style={{ fontSize: '1.8rem', margin: '1rem 0 0.3rem' }}>
               On the way
             </p>
             <p className="order-hint">
-              Rider Vishnu P. · ETA 18 min · pin {address.pincode} → {dest.area}
+              Rider Vishnu P. · bike live on Google Maps · {address.line1}, {address.city} {address.pincode}
             </p>
             <ul className="stage-list">
               {lines.map((item) => (
@@ -287,8 +317,8 @@ function OrderSheet({ seed, onClose }: { seed?: MenuItem['id']; onClose: () => v
           </button>
         )}
         {step === 'address' && (
-          <button type="button" className="cta order-app-cta" onClick={goPay}>
-            Deliver to {address.pincode || 'pin'}
+          <button type="button" className="cta order-app-cta" disabled={!serviceable} onClick={goPay}>
+            {serviceable ? `Deliver to ${address.pincode || 'pin'}` : 'Not serviceable'}
           </button>
         )}
         {step === 'pay' && (
@@ -323,40 +353,6 @@ function Field({
       <input value={value} onChange={(e) => onChange(e.target.value)} inputMode={inputMode} autoComplete="off" />
     </label>
   )
-}
-
-function DummyMap({ dest, label, pincode }: { dest: { x: number; y: number; area: string }; label: string; pincode: string }) {
-  return (
-    <div className="dummy-map" aria-label={`Map to ${label}`}>
-      <svg viewBox="0 0 320 210" className="dummy-map-svg">
-        <rect width="320" height="210" fill="#0A0908" />
-        <path d="M0 90 H320 M0 140 H320 M40 0 V210 M110 0 V210 M190 0 V210 M260 0 V210" stroke="rgba(245,239,231,0.08)" />
-        <path d="M20 170 C80 150 120 40 200 70 S300 160 320 120" fill="none" stroke="#A8390F" strokeWidth="6" />
-        <path d="M20 170 C80 150 120 40 200 70 S300 160 320 120" fill="none" stroke="#E2622A" strokeWidth="2" strokeDasharray="8 10">
-          <animate attributeName="stroke-dashoffset" from="0" to="-72" dur="1.6s" repeatCount="indefinite" />
-        </path>
-        <circle cx="48" cy="168" r="7" fill="#F5EFE7" />
-        <text x="60" y="172" fill="#A8A099" fontSize="9" fontFamily="system-ui">
-          Kitchen
-        </text>
-        <circle cx={dest.x} cy={dest.y} r="9" fill="#E2622A" />
-        <circle cx={dest.x} cy={dest.y} r="16" fill="none" stroke="#E2622A" strokeOpacity="0.45">
-          <animate attributeName="r" values="12;20;12" dur="1.8s" repeatCount="indefinite" />
-        </circle>
-      </svg>
-      <p className="map-caption">
-        {label} · {pincode} · {dest.area}
-      </p>
-    </div>
-  )
-}
-
-function pinToDest(pin: string) {
-  const n = Number(pin) || 682031
-  const x = 210 + (n % 70)
-  const y = 48 + ((n / 10) % 90)
-  const areas = ['Marine Drive', 'Ernakulam South', 'Kadavanthra', 'Panampilly Nagar', 'Fort Kochi']
-  return { x, y, area: pin === '682031' ? 'Marine Drive' : areas[n % areas.length] }
 }
 
 function titleFor(step: Step) {

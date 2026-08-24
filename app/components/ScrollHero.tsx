@@ -9,10 +9,11 @@ type Props = {
   sequence: Sequence
   heightVh?: number
   eager?: boolean
+  id?: string
   children: (progress: MotionValue<number>) => ReactNode
 }
 
-export function ScrollHero({ sequence, heightVh = 500, eager = false, children }: Props) {
+export function ScrollHero({ sequence, heightVh = 500, eager = false, id, children }: Props) {
   const sectionRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const progress = useMotionValue(0)
@@ -137,7 +138,7 @@ export function ScrollHero({ sequence, heightVh = 500, eager = false, children }
   }, [eager, progress, sequence])
 
   return (
-    <section ref={sectionRef} style={{ height: `${heightVh}vh`, position: 'relative' }}>
+    <section id={id} ref={sectionRef} style={{ height: `${heightVh}vh`, position: 'relative' }}>
       <div
         style={{
           position: 'sticky',

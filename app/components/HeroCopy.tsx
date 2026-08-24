@@ -56,6 +56,20 @@ export function HeroAssemblyCopy({ progress }: { progress: MotionValue<number> }
 
   return (
     <div className="hero-overlay">
+      <nav className="hero-nav" aria-label="Primary">
+        <a href="#top" className="display hero-nav-mark">
+          The Burger House
+        </a>
+        <div className="hero-nav-links">
+          <a href="#menu">Menu</a>
+          <a href="#grill">Grill</a>
+          <button type="button" onClick={() => startOrder()}>
+            Order
+          </button>
+          <a href="#book">Book</a>
+        </div>
+      </nav>
+
       <motion.div className="hero-dim" style={{ opacity: dim }} />
 
       <Beat progress={progress} inStart={0} inEnd={0} outStart={0.14} outEnd={0.18} style={identityPos}>
