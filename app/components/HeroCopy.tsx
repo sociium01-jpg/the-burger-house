@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion, useTransform, type MotionValue } from 'framer-motion'
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useOrderApp } from './OrderSheet'
 
 const enterEase = [0.16, 1, 0.3, 1] as const
@@ -28,7 +28,7 @@ function Beat({
   outStart,
   outEnd,
   hold = false,
-  style,
+  className,
   children,
 }: {
   progress: MotionValue<number>
@@ -37,7 +37,7 @@ function Beat({
   outStart: number
   outEnd: number
   hold?: boolean
-  style?: CSSProperties
+  className?: string
   children: ReactNode
 }) {
   const opacity = useTransform(progress, (p) =>
@@ -45,7 +45,9 @@ function Beat({
   )
   const y = useTransform(opacity, [0, 1], [18, 0])
   return (
-    <motion.div style={{ opacity, y, pointerEvents: 'auto', ...style }}>{children}</motion.div>
+    <motion.div className={className} style={{ opacity, y, pointerEvents: 'auto' }}>
+      {children}
+    </motion.div>
   )
 }
 
@@ -72,7 +74,7 @@ export function HeroAssemblyCopy({ progress }: { progress: MotionValue<number> }
 
       <motion.div className="hero-dim" style={{ opacity: dim }} />
 
-      <Beat progress={progress} inStart={0} inEnd={0} outStart={0.14} outEnd={0.18} style={identityPos}>
+      <Beat progress={progress} inStart={0} inEnd={0} outStart={0.14} outEnd={0.18} className="hero-slot hero-slot-identity">
         <motion.p
           className="label"
           initial={reduce ? false : { opacity: 0, y: 28 }}
@@ -110,15 +112,15 @@ export function HeroAssemblyCopy({ progress }: { progress: MotionValue<number> }
         </motion.a>
       </Beat>
 
-      <Beat progress={progress} inStart={0.18} inEnd={0.24} outStart={0.46} outEnd={0.54} style={rightPos}>
+      <Beat progress={progress} inStart={0.18} inEnd={0.24} outStart={0.44} outEnd={0.5} className="hero-slot hero-slot-right">
         <p className="display hero-line">Nine ingredients. No shortcuts.</p>
       </Beat>
 
-      <Beat progress={progress} inStart={0.54} inEnd={0.6} outStart={0.82} outEnd={0.88} style={leftPos}>
+      <Beat progress={progress} inStart={0.54} inEnd={0.6} outStart={0.82} outEnd={0.88} className="hero-slot hero-slot-left">
         <p className="display hero-line">Meat, salt, fire. That is the whole recipe.</p>
       </Beat>
 
-      <Beat progress={progress} inStart={0.88} inEnd={0.93} outStart={1} outEnd={1} hold style={centerPos}>
+      <Beat progress={progress} inStart={0.88} inEnd={0.93} outStart={1} outEnd={1} hold className="hero-slot hero-slot-center">
         <p className="label">The House</p>
         <p className="display hero-close">Built to order.</p>
         <motion.button
@@ -138,11 +140,11 @@ export function HeroAssemblyCopy({ progress }: { progress: MotionValue<number> }
 export function HeroCookingCopy({ progress }: { progress: MotionValue<number> }) {
   return (
     <div className="hero-overlay">
-      <Beat progress={progress} inStart={0.04} inEnd={0.12} outStart={1} outEnd={1} hold style={leftPos}>
+      <Beat progress={progress} inStart={0.04} inEnd={0.12} outStart={1} outEnd={1} hold className="hero-slot hero-slot-top">
         <p className="label">The Grill</p>
         <p className="display hero-statement">Smashed, seared, never steamed.</p>
       </Beat>
-      <Beat progress={progress} inStart={0.42} inEnd={0.5} outStart={0.82} outEnd={0.9} style={rightPos}>
+      <Beat progress={progress} inStart={0.42} inEnd={0.5} outStart={0.82} outEnd={0.9} className="hero-slot hero-slot-bottom">
         <p className="display hero-line">Twenty-four hour cure. Then the flat-top does the rest.</p>
       </Beat>
     </div>
@@ -153,11 +155,11 @@ export function HeroRoomCopy({ progress }: { progress: MotionValue<number> }) {
   const reduce = useReducedMotion()
   return (
     <div className="hero-overlay">
-      <Beat progress={progress} inStart={0.06} inEnd={0.14} outStart={0.42} outEnd={0.5} style={centerEarly}>
+      <Beat progress={progress} inStart={0.06} inEnd={0.14} outStart={0.42} outEnd={0.5} className="hero-slot hero-slot-center-early">
         <p className="label">The Room</p>
         <p className="display hero-statement">Come sit in it.</p>
       </Beat>
-      <Beat progress={progress} inStart={0.72} inEnd={0.8} outStart={1} outEnd={1} hold style={centerHigh}>
+      <Beat progress={progress} inStart={0.72} inEnd={0.8} outStart={1} outEnd={1} hold className="hero-slot hero-slot-center-high">
         <p className="label">Last call</p>
         <p className="display hero-close">Your table is waiting.</p>
         <motion.a
@@ -171,56 +173,4 @@ export function HeroRoomCopy({ progress }: { progress: MotionValue<number> }) {
       </Beat>
     </div>
   )
-}
-
-const identityPos: CSSProperties = {
-  position: 'absolute',
-  left: '6vw',
-  bottom: '10vh',
-  maxWidth: 560,
-}
-
-const rightPos: CSSProperties = {
-  position: 'absolute',
-  right: '6vw',
-  top: '38%',
-  maxWidth: 420,
-  textAlign: 'right',
-}
-
-const leftPos: CSSProperties = {
-  position: 'absolute',
-  left: '6vw',
-  top: '36%',
-  maxWidth: 460,
-}
-
-const centerPos: CSSProperties = {
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: '36%',
-  textAlign: 'center',
-  width: 'min(90vw, 640px)',
-  margin: '0 auto',
-}
-
-const centerEarly: CSSProperties = {
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: '22%',
-  textAlign: 'center',
-  width: 'min(90vw, 640px)',
-  margin: '0 auto',
-}
-
-const centerHigh: CSSProperties = {
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: '16%',
-  textAlign: 'center',
-  width: 'min(90vw, 640px)',
-  margin: '0 auto',
 }

@@ -252,18 +252,71 @@ canvas {
 .hero-line {
   font-size: clamp(1.8rem, 4vw, 3.2rem);
   margin: 0;
+  line-height: 0.95;
   text-wrap: balance;
 }
 
 .hero-statement {
   font-size: clamp(2.2rem, 6vw, 4.6rem);
   margin: 0.35rem 0 0;
-  max-width: 12ch;
+  max-width: 16ch;
+  line-height: 0.92;
+  text-wrap: balance;
 }
 
 .hero-close {
   font-size: clamp(2.4rem, 6vw, 4.8rem);
   margin: 0.4rem 0 1.1rem;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.hero-slot {
+  position: absolute;
+  z-index: 2;
+}
+
+.hero-slot-identity {
+  left: 6vw;
+  bottom: 10vh;
+  max-width: 560px;
+}
+
+.hero-slot-left,
+.hero-slot-top {
+  left: 6vw;
+  top: 26%;
+  max-width: 460px;
+}
+
+.hero-slot-right,
+.hero-slot-bottom {
+  right: 6vw;
+  top: 42%;
+  max-width: 420px;
+  text-align: right;
+}
+
+.hero-slot-center,
+.hero-slot-center-early,
+.hero-slot-center-high {
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  width: min(90vw, 640px);
+}
+
+.hero-slot-center {
+  top: 36%;
+}
+
+.hero-slot-center-early {
+  top: 22%;
+}
+
+.hero-slot-center-high {
+  top: 16%;
 }
 
 .burger-grid {
@@ -733,7 +786,72 @@ body.order-open {
   }
 
   .hero-overlay .hero-h1 {
-    font-size: clamp(2.6rem, 12vw, 4.8rem);
+    font-size: clamp(2.4rem, 11vw, 3.6rem);
+    line-height: 0.9;
+  }
+
+  .hero-lede {
+    font-size: 0.95rem;
+    max-width: none;
+  }
+
+  .hero-statement {
+    max-width: 100%;
+    font-size: clamp(1.65rem, 7vw, 2.4rem);
+  }
+
+  .hero-line {
+    font-size: clamp(1.2rem, 5vw, 1.75rem);
+  }
+
+  .hero-close {
+    font-size: clamp(1.7rem, 7.5vw, 2.6rem);
+  }
+
+  .hero-slot-identity {
+    left: 5vw;
+    right: 5vw;
+    bottom: calc(5.8rem + env(safe-area-inset-bottom));
+    max-width: none;
+  }
+
+  .hero-slot-left,
+  .hero-slot-top,
+  .hero-slot-center-early {
+    top: calc(env(safe-area-inset-top) + 7.25rem);
+    left: 5vw;
+    right: 5vw;
+    max-width: none;
+    width: auto;
+    text-align: left;
+  }
+
+  .hero-slot-center-high {
+    top: 30%;
+    left: 5vw;
+    right: 5vw;
+    width: auto;
+    max-width: none;
+    text-align: center;
+  }
+
+  .hero-slot-right,
+  .hero-slot-bottom {
+    top: auto;
+    right: 5vw;
+    left: 5vw;
+    bottom: calc(5.8rem + env(safe-area-inset-bottom));
+    max-width: none;
+    text-align: left;
+  }
+
+  .hero-slot-center {
+    top: auto;
+    left: 5vw;
+    right: 5vw;
+    bottom: calc(6.2rem + env(safe-area-inset-bottom));
+    width: auto;
+    text-align: center;
   }
 }
 
