@@ -319,6 +319,54 @@ canvas {
   top: 16%;
 }
 
+.menu-section {
+  background: var(--background);
+  padding: 4.5rem 6vw 4rem;
+}
+
+.menu-title {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  margin: 0.4rem 0 0;
+}
+
+.burger-name {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin: 0;
+}
+
+.burger-card-body {
+  padding: 1rem 1.1rem 1.2rem;
+}
+
+.burger-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-hero {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #12100e;
+}
+
+.video-hero-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-hero-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
 .burger-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -763,10 +811,9 @@ body.order-open {
     padding-bottom: calc(4.4rem + env(safe-area-inset-bottom));
   }
 
-  .burger-sticky {
-    padding-top: 5.5rem !important;
-    padding-bottom: 5rem !important;
-    justify-content: flex-start !important;
+  .menu-section {
+    padding-top: 5.5rem;
+    padding-bottom: 5rem;
   }
 
   .burger-grid {

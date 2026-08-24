@@ -137,16 +137,16 @@ export function HeroAssemblyCopy({ progress }: { progress: MotionValue<number> }
   )
 }
 
-export function HeroCookingCopy({ progress }: { progress: MotionValue<number> }) {
+export function HeroCookingCopy() {
   return (
     <div className="hero-overlay">
-      <Beat progress={progress} inStart={0.04} inEnd={0.12} outStart={1} outEnd={1} hold className="hero-slot hero-slot-top">
+      <div className="hero-slot hero-slot-top">
         <p className="label">The Grill</p>
         <p className="display hero-statement">Smashed, seared, never steamed.</p>
-      </Beat>
-      <Beat progress={progress} inStart={0.42} inEnd={0.5} outStart={0.82} outEnd={0.9} className="hero-slot hero-slot-bottom">
+      </div>
+      <div className="hero-slot hero-slot-bottom">
         <p className="display hero-line">Twenty-four hour cure. Then the flat-top does the rest.</p>
-      </Beat>
+      </div>
     </div>
   )
 }

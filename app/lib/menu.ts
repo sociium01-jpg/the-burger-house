@@ -4,6 +4,7 @@ export type MenuItem = {
   description: string
   price: number
   sequenceKey: 'burgerChicken' | 'burgerVeg' | 'burgerSteak' | 'burgerMutton'
+  video: string
 }
 
 export const MENU: MenuItem[] = [
@@ -13,6 +14,7 @@ export const MENU: MenuItem[] = [
     description: 'Buttermilk-fried thigh, pickle-brine slaw, fermented chilli mayo.',
     price: 349,
     sequenceKey: 'burgerChicken',
+    video: '/videos/burger-01-chicken.mp4',
   },
   {
     id: 'veg',
@@ -20,6 +22,7 @@ export const MENU: MenuItem[] = [
     description: 'Charred courgette, smoked halloumi, roasted pepper relish.',
     price: 329,
     sequenceKey: 'burgerVeg',
+    video: '/videos/burger-02-veg.mp4',
   },
   {
     id: 'steak',
@@ -27,6 +30,7 @@ export const MENU: MenuItem[] = [
     description: 'Dry-aged steak, caramelised onion, bone-marrow butter.',
     price: 499,
     sequenceKey: 'burgerSteak',
+    video: '/videos/burger-03-steak.mp4',
   },
   {
     id: 'mutton',
@@ -34,6 +38,7 @@ export const MENU: MenuItem[] = [
     description: 'Slow-spiced shoulder, mint yoghurt, crisp shallot.',
     price: 449,
     sequenceKey: 'burgerMutton',
+    video: '/videos/burger-04-mutton.mp4',
   },
 ]
 

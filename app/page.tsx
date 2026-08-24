@@ -7,7 +7,8 @@ import { HeroAssemblyCopy, HeroCookingCopy, HeroRoomCopy } from './components/He
 import { OrderSection } from './components/OrderSection'
 import { OrderAppProvider } from './components/OrderSheet'
 import { ScrollHero } from './components/ScrollHero'
-import { SEQUENCES } from './frames'
+import { VideoHero } from './components/VideoHero'
+import { SEQUENCES, framePath } from './frames'
 
 export default function HomePage() {
   return (
@@ -20,9 +21,13 @@ export default function HomePage() {
 
           <BurgerGrid />
 
-          <ScrollHero sequence={SEQUENCES.heroCooking} heightVh={400} id="grill">
-            {(progress) => <HeroCookingCopy progress={progress} />}
-          </ScrollHero>
+          <VideoHero
+            id="grill"
+            src="/videos/hero-02-cooking.mp4"
+            poster={framePath(SEQUENCES.heroCooking.dir, 0)}
+          >
+            <HeroCookingCopy />
+          </VideoHero>
 
           <div id="book">
             <OrderSection />
